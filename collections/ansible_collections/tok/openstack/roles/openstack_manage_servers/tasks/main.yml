@@ -1,0 +1,38 @@
+- name: Create instances
+  os_server:
+    cloud:  "{{ openstack_cloud | default('openstack') }}"
+    name:  "{{ __openstack_server.instance_name }}"
+    state: "{{ openstack_server_state | default(__openstack_server.state) | default('present') }}"
+    image: "{{ __openstack_server.image | default('rhel-7-6') }}"
+    flavor: "{{ __openstack_server.flavor | default('m2.medium') }}"
+    key_name: "{{ __openstsack_server.key_name | default('ansible_ssh_key') }}"
+    security_groups: "{{ __openstack_server.security_group_name }}"
+    delete_fip: "{{ __openstack_server.delete_fip }}"
+    meta: "group={{ __openstack_server.group }},deployment_name={{ __openstack_server.deployment }}" 
+    nics:
+      - net-name: "{{ __openstack_server.net_name }}"
+    userdata: |
+      #!/bin/bash
+      curl -o /tmp/openstack.pub http://www.opentlc.com/download/ansible_bootcamp/openstack_keys/openstack.pub
+      cat /tmp/openstack.pub >> /home/cloud-user/.ssh/authorized_keys
+  loop: "{{ openstack_servers }}"
+  loop_control:
+    loop_var: __openstack_server
+  async: 900
+  poll: 0
+  register: r_instances
+
+- debug:
+    msg: "Instances {{ r_instances }}"
+  #- name: Add floating IP to instance
+  #os_floating_ip:
+  #  cloud: "{{ openstack_cloud | default('openstack') }}"
+  #  state: "{{ __openstack_server.ext_network_state | default('present') }}"
+  #  reuse: "{{ __openstack_server.ext_network_reuse | default('false') }}"
+  #  server: "{{ __openstack_server.instance_name }}"
+  #  network: "{{ __openstack_server.ext_network }}"
+  #  wait: true
+  #  timeout: 200
+  #loop: "{{ openstack_servers }}"
+  #loop_control:
+  #  loop_var: __openstack_server

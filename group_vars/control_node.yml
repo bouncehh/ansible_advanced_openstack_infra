@@ -75,26 +75,35 @@ openstack_security_groups: []
 openstack_servers:
 
   - instance_name: app1
-    group: app_servers
-    deployment: dev
+    group: apps_servers
+    state: present
+    image: RHEL-7.6
+    key_name: ansible_ssh_key
+    flavor: m2.medium
+    deployment: QA
     security_group_name: apps
-    image: "{{ _server_image | default('rhel-7.6') }}"
+    net_name: int_network
+    ext_network: ext_network
+    ext_network_state: present
+    ext_network_reuse: false
+    delete_fip: true
+    #image: "{{ _server_image | default('rhel-7.6') }}"
 
-  - instance_name: app2
-    group: app_servers
-    deployment: dev
-    security_group_name: apps
-    image: "{{ _server_image | default('rhel-7.6') }}"
+            #  - instance_name: app2
+            #    group: app_servers
+            #    deployment: dev
+            #    security_group_name: apps
+            #    image: "{{ _server_image | default('rhel-7.6') }}"
 
-  - instance_name: db
-    group: database_servers
-    deployment: dev
-    security_group_name: db
-    image: "{{ _server_image | default('rhel-7.6') }}"
+            #  - instance_name: db
+            #    group: database_servers
+            #    deployment: dev
+            #    security_group_name: db
+            #    image: "{{ _server_image | default('rhel-7.6') }}"
 
-  - instance_name: frontend1
-    group: load_balancers
-    deployment: dev
-    security_group_name: frontend
-    image: "{{ _server_image | default('rhel-7.6') }}"
+            #  - instance_name: frontend1
+            #    group: load_balancers
+            #    deployment: dev
+            #    security_group_name: frontend
+            #    image: "{{ _server_image | default('rhel-7.6') }}"
 ...
