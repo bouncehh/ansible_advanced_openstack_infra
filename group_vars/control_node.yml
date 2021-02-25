@@ -76,7 +76,7 @@ openstack_servers:
 
   - instance_name: app1
     group: apps_servers
-    state: present
+    #state: present
     image: RHEL-7.6
     key_name: ansible_ssh_key
     flavor: m2.medium
