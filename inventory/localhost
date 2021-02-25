@@ -3,3 +3,4 @@ localhost ansible_connection=local
 
 [control_node:vars]
 ansible_python_interpreter=/usr/bin/env python3
+openstack_server_state=present

@@ -75,9 +75,9 @@ openstack_security_groups: []
 openstack_servers:
 
   - instance_name: app1
-    group: apps_servers
-    #state: present
-    image: RHEL-7.6
+    group: app_servers
+    state: present
+    image: rhel-7.6
     key_name: ansible_ssh_key
     flavor: m2.medium
     deployment: QA
@@ -87,23 +87,47 @@ openstack_servers:
     ext_network_state: present
     ext_network_reuse: false
     delete_fip: true
-    #image: "{{ _server_image | default('rhel-7.6') }}"
 
-            #  - instance_name: app2
-            #    group: app_servers
-            #    deployment: dev
-            #    security_group_name: apps
-            #    image: "{{ _server_image | default('rhel-7.6') }}"
+  - instance_name: app2
+    group: app_servers
+    state: present
+    image: rhel-7.6
+    key_name: ansible_ssh_key
+    flavor: m2.medium
+    deployment: dev
+    security_group_name: apps
+    net_name: int_network
+    ext_network: ext_network
+    ext_network_state: present
+    ext_network_reuse: false
+    delete_fip: true
 
-            #  - instance_name: db
-            #    group: database_servers
-            #    deployment: dev
-            #    security_group_name: db
-            #    image: "{{ _server_image | default('rhel-7.6') }}"
+  - instance_name: db
+    group: database_servers
+    state: present
+    image: rhel-7.6
+    key_name: ansible_ssh_key
+    flavor: m2.medium
+    deployment: dev
+    security_group_name: db
+    net_name: int_network
+    ext_network: ext_network
+    ext_network_state: present
+    ext_network_reuse: false
+    delete_fip: true
 
-            #  - instance_name: frontend1
-            #    group: load_balancers
-            #    deployment: dev
-            #    security_group_name: frontend
-            #    image: "{{ _server_image | default('rhel-7.6') }}"
-...
+  - instance_name: frontend
+    group: load_balancers
+    state: present
+    image: rhel-7.6
+    key_name: ansible_ssh_key
+    flavor: m2.medium
+    deployment: dev
+    security_group_name: frontend
+    net_name: int_network
+    ext_network: ext_network
+    ext_network_state: present
+    ext_network_reuse: false
+    delete_fip: true
+
+
